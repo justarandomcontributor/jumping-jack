@@ -1,5 +1,6 @@
 package com.example.jumpingjack
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,20 +13,21 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-
 class MainActivity : AppCompatActivity() {
-    lateinit var sharedPreferences: SharedPreferences
-    val shared = "sharedPrefs"
-    var who = "Name"
-    var highscore: String = "Score"
-    var temp_score = 0
-    var temp_name = ""
+    private lateinit var sharedPreferences: SharedPreferences
+    private val shared = "sharedPrefs"
+    private var who = "Name"
+    private var highscore: String = "Score"
+    private var tempScore = 0
+    private var tempName = ""
+    private var backPressedTime: Long = 0
 
     private var point = 0
-    lateinit var score: TextView
-    lateinit var timer: TextView
+    private lateinit var score: TextView
+    private lateinit var timer: TextView
 
     lateinit var start: Button
 
@@ -92,6 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun play() {
         this.point = 0
 
@@ -107,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
         object : CountDownTimer(5000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                var temp = millisUntilFinished / 1000
+                val temp = millisUntilFinished / 1000
                 timer.text = "Game Starts in: $temp"
             }
 
@@ -133,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                             13 -> image14.visibility = View.GONE
                             14 -> image15.visibility = View.GONE
                         }
-                        var temp = millisUntilFinished / 1000
+                        val temp = millisUntilFinished / 1000
                         timer.text = ("Time Remaining: $temp")
 
                         random = (0..15).random()
@@ -202,11 +205,16 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.exit -> {
-                finish()
+                this.finish()
                 true
             }
             R.id.high_score -> {
                 val intent = Intent(this, HighScore::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.help -> {
+                val intent = Intent(this, Helper::class.java)
                 startActivity(intent)
                 true
             }
@@ -221,12 +229,12 @@ class MainActivity : AppCompatActivity() {
         score.text = ("Score: $point")
     }
 
-    fun loadData() {
-        temp_name = sharedPreferences.getString(who, "Anonymous")!!
-        temp_score = sharedPreferences.getInt(highscore, 0)
+    private fun loadData() {
+        tempName = sharedPreferences.getString(who, "Anonymous")!!
+        tempScore = sharedPreferences.getInt(highscore, 0)
     }
 
-    fun saveData() {
+    private fun saveData() {
         val editor = sharedPreferences.edit()
         editor.putInt(highscore, point)
         editor.apply()
@@ -234,12 +242,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun savescore() {
         loadData()
-        if ((temp_score) < point) {
+        if ((tempScore) < point) {
             saveData()
             val intent = Intent(this, HighScore::class.java)
             intent.putExtra("flag_for_saving", true)
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        val backToast =
+            Toast.makeText(this.baseContext, "Press back again to exit.", Toast.LENGTH_SHORT)
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast?.cancel()
+            super.onBackPressed()
+            return
+        } else {
+            backToast.show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 
 }

@@ -1,56 +1,59 @@
 package com.example.jumpingjack
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_high_score.*
 
 class HighScore : AppCompatActivity() {
 
-    lateinit var sharedPreferences: SharedPreferences
-    val shared = "sharedPrefs"
-    var who = "Name"
-    var highscore: String = "Score"
-    var temp_score = 0
-    var temp_name = ""
+    private lateinit var sharedPreferences: SharedPreferences
+    private val shared = "sharedPrefs"
+    private var who = "Name"
+    private var highscore: String = "Score"
+    private var tempScore = 0
+    private var tempName = ""
+    private var backToast: Toast? = null
 
+    private lateinit var highscoreDisplay: TextView
 
-    lateinit var highscore_display: TextView
-
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_high_score)
 
         sharedPreferences = getSharedPreferences(shared, Context.MODE_PRIVATE)
 
+        backToast = makeText(this.baseContext, "Press back again to exit.", Toast.LENGTH_SHORT)
         val intent = intent
         val flag = intent.getBooleanExtra("flag_for_saving", false)
         loadData()
-        highscore_display = findViewById(R.id.highscore_diaplay)
-        val name_input: View = findViewById(R.id.name_input)
-        val save_button: View = findViewById(R.id.save_button)
-        val back_button: View = findViewById(R.id.back)
+        highscoreDisplay = findViewById(R.id.highscore_diaplay)
+        val nameInput: View = findViewById(R.id.name_input)
+        val saveButton: View = findViewById(R.id.save_button)
+        val backButton: View = findViewById(R.id.back)
 
-        save_button.setOnClickListener { saveData() }
+        saveButton.setOnClickListener { saveData() }
         if (flag) {
-            highscore_display.text = "A new highscore!\n$temp_score"
-            name_input.visibility = VISIBLE
-            save_button.visibility = VISIBLE
-        } else {
-            highscore_display.text = "Name: $temp_name\nScore: $temp_score"
-        }
+            highscoreDisplay.text = "A new highscore!\n$tempScore"
+            nameInput.visibility = VISIBLE
+            saveButton.visibility = VISIBLE
+        } else highscoreDisplay.text = "Name: $tempName\nScore: $tempScore"
 
-        back_button.setOnClickListener { go_back_to_main() }
+        backButton.setOnClickListener { goBackToMain() }
 
     }
 
 
+    @SuppressLint("SetTextI18n")
     fun saveData() {
         val editor = sharedPreferences.edit()
         var temp = name_input.editText?.text.toString()
@@ -59,13 +62,14 @@ class HighScore : AppCompatActivity() {
         }
         editor.putString(who, temp)
         editor.apply()
-        highscore_display.text = "Name: $temp \nScore: $temp_score"
+        highscoreDisplay.text = "Name: $temp \nScore: $tempScore"
+        backToast?.show()
         closeKeyboard()
     }
 
-    fun loadData() {
-        temp_name = sharedPreferences.getString(who, "Anonymous")!!
-        temp_score = sharedPreferences.getInt(highscore, 0)
+    private fun loadData() {
+        tempName = sharedPreferences.getString(who, "Anonymous")!!
+        tempScore = sharedPreferences.getInt(highscore, 0)
     }
 
     private fun closeKeyboard() {
@@ -76,8 +80,8 @@ class HighScore : AppCompatActivity() {
         }
     }
 
-    private fun go_back_to_main() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+    private fun goBackToMain() {
+        backToast?.cancel()
+        this.finish()
     }
 }

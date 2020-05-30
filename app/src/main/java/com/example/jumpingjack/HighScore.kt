@@ -23,9 +23,9 @@ class HighScore : AppCompatActivity() {
     private var tempName = ""
     private var backToast: Toast? = null
 
-    private lateinit var highscoreDisplay: TextView
+    private lateinit var highscoredisplay: TextView
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_high_score)
@@ -36,17 +36,17 @@ class HighScore : AppCompatActivity() {
         val intent = intent
         val flag = intent.getBooleanExtra("flag_for_saving", false)
         loadData()
-        highscoreDisplay = findViewById(R.id.highscore_diaplay)
+        highscoredisplay = findViewById(R.id.highscore_diaplay)
         val nameInput: View = findViewById(R.id.name_input)
         val saveButton: View = findViewById(R.id.save_button)
         val backButton: View = findViewById(R.id.back)
 
         saveButton.setOnClickListener { saveData() }
         if (flag) {
-            highscoreDisplay.text = "A new highscore!\n$tempScore"
+            highscoredisplay.text = "A new highscore!\n$tempScore"
             nameInput.visibility = VISIBLE
             saveButton.visibility = VISIBLE
-        } else highscoreDisplay.text = "Name: $tempName\nScore: $tempScore"
+        } else highscoredisplay.text = "Name: $tempName\nScore: $tempScore"
 
         backButton.setOnClickListener { goBackToMain() }
 
@@ -62,7 +62,7 @@ class HighScore : AppCompatActivity() {
         }
         editor.putString(who, temp)
         editor.apply()
-        highscoreDisplay.text = "Name: $temp \nScore: $tempScore"
+        highscoredisplay.text = "Name: $temp \nScore: $tempScore"
         backToast?.show()
         closeKeyboard()
     }

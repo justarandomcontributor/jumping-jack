@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/about"
-        android:title="About" />
+        android:title="About"
+        tools:ignore="HardcodedText" />
     <item
         android:id="@+id/high_score"
-        android:title="Highscore" />
+        android:title="High-Score"
+        tools:ignore="HardcodedText" />
     <item
         android:id="@+id/help"
-        android:title="Help" />
+        android:title="Help"
+        tools:ignore="HardcodedText" />
     <item
         android:id="@+id/exit"
-        android:title="Exit" />
+        android:title="Exit"
+        tools:ignore="HardcodedText" />
 
 </menu>

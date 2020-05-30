@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var score: TextView
     lateinit var timer: TextView
 
-    lateinit var button: Button
+    lateinit var start: Button
 
     lateinit var image: ImageView
     lateinit var image2: ImageView
@@ -52,8 +52,9 @@ class MainActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences(shared, Context.MODE_PRIVATE)
 
-        button = findViewById(R.id.button)
+        start = findViewById(R.id.start)
         score = findViewById(R.id.Score)
+        timer = findViewById(R.id.Timer)
 
         image = findViewById(R.id.image_random)
         image2 = findViewById(R.id.image_random2)
@@ -87,17 +88,19 @@ class MainActivity : AppCompatActivity() {
         image14.setOnClickListener { update() }
         image15.setOnClickListener { update() }
 
-        button.setOnClickListener { play() }
+        start.setOnClickListener { play() }
 
     }
 
     private fun play() {
         this.point = 0
 
+        score.visibility = View.VISIBLE
+        timer.visibility = View.VISIBLE
         this.score.text = "Score: $point"
 
-        button.visibility = View.GONE
-        var random = (0..15).random()
+        start.visibility = View.GONE
+        var random = (0..14).random()
 
         score = findViewById(R.id.Score)
         this.timer = findViewById(R.id.Timer)
@@ -155,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onFinish() {
-                        timer.text = "Stopped!"
+                        timer.text = "Timeout!"
 
                         when (random) {
                             0 -> image.visibility = View.GONE
@@ -175,7 +178,7 @@ class MainActivity : AppCompatActivity() {
                             14 -> image15.visibility = View.GONE
                         }
                         savescore()
-                        button.visibility = View.VISIBLE
+                        start.visibility = View.VISIBLE
                     }
                 }.start()
 

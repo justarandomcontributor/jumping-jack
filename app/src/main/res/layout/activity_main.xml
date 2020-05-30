@@ -236,6 +236,9 @@
         android:text="Time: 60"
         android:textColor="#0B0A0A"
         android:textSize="30sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -246,13 +249,14 @@
         android:text="Score: 0"
         android:textColor="#0B0A0A"
         android:textSize="30sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/start"
         android:layout_width="113dp"
         android:layout_height="63dp"
-        android:background="#FFEB3B"
+        android:background="@drawable/rounded_corners"
         android:text="START"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/Score"
